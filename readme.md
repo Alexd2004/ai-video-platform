@@ -13,31 +13,75 @@ Tech Stack:
 
 Here is an AI summary on how the current project structre will look
 video-platform
+video-platform
 │
-├── cmd/                # Application entrypoints (API server, workers)
-│   └── api/            # Starts the HTTP server
+├── cmd/
+│   └── api/
 │
-├── internal/           # Core application logic (private to this project)
-│   ├── auth/           # User authentication (register, login, JWT)
-│   ├── video/          # Video management (CRUD, metadata, playback)
-│   ├── task/           # Task/job management for video processing
-│   ├── database/       # Database connection and setup
-│   ├── middleware/     # API middleware (auth, logging, etc.)
-│   └── config/         # Environment variables and configuration
+├── internal/
+│   ├── auth/
+│   ├── video/
+│   ├── task/
+│   ├── database/
+│   ├── middleware/
+│   └── config/
 │
-├── pkg/                # Reusable utilities (helpers, validators, etc.)
+├── pkg/
 │
-├── workers/            # Background processing services
-│                       # (transcoding, transcription, AI tasks)
+├── workers/
 │
-├── deployments/        # Infrastructure configuration
-│   ├── docker/         # Dockerfiles and docker-compose
-│   └── k8s/            # Kubernetes deployment configs
+├── deployments/
+│   ├── docker/
+│   └── k8s/
 │
-├── scripts/            # Automation scripts (setup, seeding, dev tools)
+├── scripts/
 │
-├── migrations/         # Database schema migrations
+├── migrations/
 │
-├── .env.example        # Example environment variables
-├── go.mod              # Go module and dependencies
-└── README.md           # Project documentation
+├── .env.example
+├── go.mod
+└── README.md
+Folder Overview
+
+cmd/
+Contains application entrypoints. The api folder starts the HTTP server for the backend.
+
+internal/
+Core application logic that is private to the project. This is where most backend code lives.
+
+auth/ handles user authentication (register, login, JWT)
+
+video/ manages video metadata and video-related APIs
+
+task/ manages processing jobs and task tracking
+
+database/ handles database connections and setup
+
+middleware/ contains API middleware like authentication and logging
+
+config/ loads environment variables and configuration
+
+pkg/
+Reusable utilities or helper functions used across the project.
+
+workers/
+Background processing services that run tasks such as video transcoding, transcription, and AI processing.
+
+deployments/
+Infrastructure configuration for running the project in containers or Kubernetes.
+
+docker/ contains Dockerfiles and Docker Compose configs
+
+k8s/ contains Kubernetes deployment manifests
+
+scripts/
+Automation scripts for development tasks such as database setup or running workers.
+
+migrations/
+Database schema migration files for creating and updating database tables.
+
+.env.example
+Example environment variables needed to run the project.
+
+go.mod
+Defines the Go module and tracks project dependencies.
