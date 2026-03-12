@@ -12,36 +12,6 @@ Tech Stack:
 
 
 Here is an AI summary on how the current project structre will look
-video-platform
-video-platform
-│
-├── cmd/
-│   └── api/
-│
-├── internal/
-│   ├── auth/
-│   ├── video/
-│   ├── task/
-│   ├── database/
-│   ├── middleware/
-│   └── config/
-│
-├── pkg/
-│
-├── workers/
-│
-├── deployments/
-│   ├── docker/
-│   └── k8s/
-│
-├── scripts/
-│
-├── migrations/
-│
-├── .env.example
-├── go.mod
-└── README.md
-Folder Overview
 
 cmd/
 Contains application entrypoints. The api folder starts the HTTP server for the backend.
