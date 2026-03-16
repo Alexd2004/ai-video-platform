@@ -29,6 +29,20 @@ The name is important
 
 5. Later when we build migrations in the database files i will update the next steps
 
+run the database migration
+- psql video_platform < migrations/001_create_users_table.sql
+
+6. Verify it 
+- psql video_platform
+- \dt (checks the tables)
+- \d users (to insepect the table)
+- users
+- to exit write \q 
+
+7. You can do some tests inside psql if you want to play around with inserting users there
+
+
+
 
 
 Here is an AI summary on how the current project structre will look
