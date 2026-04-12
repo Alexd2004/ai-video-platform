@@ -17,6 +17,11 @@ type register struct {
 	Password string `json:"password"`
 }
 
+// Docs i used
+// https://go.dev/doc/database/querying
+// https://www.practical-go-lessons.com/post/how-to-insert-data-into-a-mysql-database-with-golang-ccbmu7s6qcuc70nnaia0
+// https://pkg.go.dev/github.com/gin-gonic/gin#Context.Handler
+
 // I omit ID cause thats made at the DB level itself
 const insertUserQuery = `INSERT INTO users (username, email, password_hash, created_at, updated_at) VALUES ($1, $2, $3, NOW(), NOW())`
 
