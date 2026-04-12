@@ -10,6 +10,8 @@ Tech Stack:
 - Kubernetes
 
 
+TODO: REPLACE all errors logs with the log.fatalF instead of console.log 
+
 
 # Database Setup Importance
 Please create a .env file following the structure of the .env.example file. Use your detials 
