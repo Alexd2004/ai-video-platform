@@ -2,6 +2,7 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -26,4 +27,26 @@ func SignAccessToken(secret, userID string) (string, error) {
 	}
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return t.SignedString([]byte(secret))
+}
+
+// ParseAccessToken parses a compact JWT string, verifies HMAC-SHA256 with secret, and checks claims (incl. expiry).
+// On success, RegisteredClaims.Subject is the user id issued at login.
+func ParseAccessToken(secret, tokenString string) (*jwt.RegisteredClaims, error) {
+	if secret == "" {
+		return nil, errors.New("jwt secret is empty")
+	}
+	claims := &jwt.RegisteredClaims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !token.Valid {
+		return nil, errors.New("token is invalid")
+	}
+	return claims, nil
 }

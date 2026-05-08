@@ -7,6 +7,7 @@ import (
 	"video-platform/internal/config"
 	"video-platform/internal/database"
 	handlerauth "video-platform/internal/handler/auth"
+	"video-platform/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +34,11 @@ func main() {
 	auth := r.Group("/auth")
 	auth.POST("/register", handlerauth.PostRegister(db))
 	auth.POST("/login", handlerauth.PostLogin(db, cfg.JWTSecret))
+
+	// Example protected routes: send Authorization: Bearer <token> from POST /auth/login.
+	api := r.Group("/api")
+	api.Use(middleware.RequireJWT(cfg.JWTSecret))
+	api.GET("/me", handlerauth.GetMe)
 
 	if err := r.Run(cfg.HTTPAddr); err != nil {
 		log.Fatal(err)
