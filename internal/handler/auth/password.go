@@ -7,24 +7,27 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// bcryptCost is the work factor for bcrypt.GenerateFromPassword (higher = slower and harder to brute-force).
+const bcryptCost = 14
+
+// PasswordHash returns a bcrypt hash suitable for storing in users.password_hash.
 func PasswordHash(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcryptCost)
 	return string(bytes), err
 }
 
-// Need to review the types here
-func CheckPasswordhash(password string, hashedPassword []byte) error {
-	err := bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
-
-	return err
+// CheckPasswordHash compares a plaintext password to a stored bcrypt hash
+// Returns nil if they match; otherwise an error from bcrypt
+func CheckPasswordHash(password, hashedPassword string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-// https://pkg.go.dev/github.com/go-passwd/validator#ContainsAtLeast used this package
+// PasswordValidation runs policy checks before hashing (registration).
+// Uses github.com/go-passwd/validator: common password list plus characters
+//
+// Se  https://pkg.go.dev/github.com/go-passwd/validator#ContainsAtLeast
 func PasswordValidation(password string) error {
-
-	// The way this api is designed is that commonpassword doesn't validate it itself, but we use it
-	// to build a checker, which is why i add the error message i want attached to it, then i set it to a new func
-	// Then i can use it
+	// CommonPassword returns a ValidateFunc; pass a custom error to return when the password is in the list
 	checkCommon := validator.CommonPassword(errors.New("password is too common"))
 	if err := checkCommon(password); err != nil {
 		return err
@@ -35,15 +38,10 @@ func PasswordValidation(password string) error {
 	checkDigit := validator.ContainsAtLeast("0123456789", 1, errors.New("must contain a number"))
 	checkSpecial := validator.ContainsAtLeast("!@#$%^&*()-_=+[]{}|;:,.<>/?~", 1, errors.New("must contain a special character"))
 
-	// Here i am combining all the mini validatir funcs from above into one massive rule set func below
 	rules := validator.New(checkLower, checkUpper, checkDigit, checkSpecial)
-	// Then i can validate it
 	if err := rules.Validate(password); err != nil {
 		return err
 	}
 
 	return nil
 }
-
-// Add tests for these funcs above
-// TODO MUST add test
